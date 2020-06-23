@@ -35,5 +35,14 @@ describe('Seed test', () => {
     const result = await Review.find();
     expect(result).toHaveLength(100);
   });
+
+  it('will seed movie and review data with given object', async() => {
+    const moviesAndReviews = await { movieAmount: 20, reviewAmount: 5 };
+    await seed(moviesAndReviews);
+    const movieResult = await Movie.find();
+    const reviewResult = await Review.find();
+    expect(movieResult).toHaveLength(20),
+    expect(reviewResult).toHaveLength(5);
+  });
   
 });
