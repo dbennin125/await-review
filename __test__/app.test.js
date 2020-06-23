@@ -2,11 +2,14 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
 const connect = require('../utils.js/connect');
+const seed = require('../lib/data-helpers/seed');
 
 const request = require('supertest');
 const app = require('../app');
+const Movie = require('../lib/models/Movie');
+const Review = require('../lib/models/Review');
 
-describe('Membership routes', () => {
+describe('Seed test', () => {
   beforeAll(async() => {
     const uri = await mongod.getUri();
     return connect(uri);
@@ -21,8 +24,16 @@ describe('Membership routes', () => {
     return mongod.stop();
   });
 
-  it('will pass a test', () => {
- 
+  it('will seed movie data', async() => {
+    await seed();
+    const result = await Movie.find();
+    expect(result).toHaveLength(7);
+  });
+
+  it('will seed review data', async() => {
+    await seed();
+    const result = await Review.find();
+    expect(result).toHaveLength(100);
   });
   
 });
